@@ -1286,3 +1286,19 @@ footer {
 .central-hea {
   display: block;
 }
+
+/* Body scroll change */
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+  background-color: #f9f9fd;
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: linear-gradient(180deg, #df5950 11.19%, #451046 93.72%);
+}
