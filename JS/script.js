@@ -1,229 +1,207 @@
-let mySwiper = new Swiper(".mySwiper", {
-  loop: true,
-  slidesPerView: 3,
-  spaceBetween: 20,
-  navigation: {
-    prevEl: ".swiper-button-prev",
-    nextEl: ".swiper-button-next",
-  },
+AOS.init({
+  duration: 1000,
 });
-let mySwiper2 = new Swiper(".mySwiper2", {
-  loop: true,
-  slidesPerView: 3,
-  spaceBetween: 20,
-  navigation: {
-    prevEl: ".swiper-button-prev",
-    nextEl: ".swiper-button-next",
-  },
+// Обратный отсчёт
+function dateCounter() {
+  //HTML
+  let days = document.querySelector(".days");
+  let hours = document.querySelector(".hours");
+  let minutes = document.querySelector(".minutes");
+  let seconds = document.querySelector(".seconds");
+
+  // Делаю расчеты
+  let nextDate = new Date(`Jan 07 ${new Date().getFullYear()} 18:00:00`);
+
+  let today = new Date();
+  let diff = nextDate - today;
+
+  // Перевод в дни
+  let daysLeft = Math.floor(diff / 1000 / 60 / 60 / 24);
+  // Перевод в часов
+  let hoursLeft = Math.floor(diff / 1000 / 60 / 60) % 24;
+  // Перевод в минут
+  let minutesLeft = Math.floor(diff / 1000 / 60) % 60;
+  // Перевод в секунд
+  let secondsLeft = Math.floor(diff / 1000) % 60;
+
+  // Меняю значения через innerHTML
+  days.innerHTML = daysLeft;
+  hours.innerHTML = hoursLeft;
+  minutes.innerHTML = minutesLeft;
+  seconds.innerHTML = secondsLeft;
+}
+// Запускаю расчет каждую секунду через setInterval
+setInterval(dateCounter);
+
+// Меняется сумма при ползунке //
+function rangeMoney() {
+  let range1 = document.querySelector(".range-1");
+  let money = document.querySelector(".got-money");
+  money.innerHTML = +range1.value * 1000 + "₽";
+}
+setInterval(rangeMoney);
+
+// Fast-start animation
+let start_height = 1300;
+function findHeight() {
+  let scroll_height = window.pageYOffset;
+  let anim_items = document.querySelectorAll(".per-out");
+  for (let item of anim_items) {
+    for (let item2 of item.children) {
+      if (scroll_height >= start_height) {
+        item2.classList.remove("hide");
+      }
+    }
+  }
+}
+setInterval(findHeight);
+
+// Drag and Drop (by Hasan)
+
+let block_img = document.querySelectorAll(".drag-item");
+
+let funct = function () {
+  let item_of_this;
+  let drag;
+  function dr_st() {
+    drag = this;
+    item_of_this = drag.children;
+    this.classList.add("scale");
+  }
+  function dr_ent() {}
+
+  function dr_ov(event) {
+    event.preventDefault();
+    this.classList.add("scale");
+  }
+
+  function dr_lv() {
+    this.classList.remove("scale");
+  }
+
+  function dr_end() {
+    this.classList.remove("scale");
+  }
+
+  function dr_op() {
+    for (let item of item_of_this) {
+      this.append(item);
+    }
+
+    let item_of_item = this.children;
+
+    for (let item of item_of_item) {
+      drag.append(item);
+    }
+  }
+
+  for (let item of block_img) {
+    item.addEventListener("dragstart", dr_st);
+    item.addEventListener("dragenter", dr_ent);
+    item.addEventListener("dragover", dr_ov);
+    item.addEventListener("dragleave", dr_lv);
+    item.addEventListener("dragend", dr_end);
+    item.addEventListener("drop", dr_op);
+  }
+};
+
+funct();
+
+// Biography Cristiano Ronaldo
+document.querySelectorAll(".bio-btn")[1].addEventListener("click", function () {
+  window.open(
+    "https://ru.wikipedia.org/wiki/%D0%9A%D1%80%D0%B8%D1%88%D1%82%D0%B8%D0%B0%D0%BD%D1%83_%D0%A0%D0%BE%D0%BD%D0%B0%D0%BB%D0%B4%D1%83"
+  );
+});
+document.querySelectorAll(".bio-btn")[4].addEventListener("click", function () {
+  window.open(
+    "https://ru.wikipedia.org/wiki/%D0%9A%D1%80%D0%B8%D1%88%D1%82%D0%B8%D0%B0%D0%BD%D1%83_%D0%A0%D0%BE%D0%BD%D0%B0%D0%BB%D0%B4%D1%83"
+  );
 });
 
-//Тут кнопка оставитьт заявку
+// Figma open on last link
+document.querySelector(".last-link").addEventListener("click", function () {
+  window.open(
+    "https://www.figma.com/file/ShKB1fVmuBKPPmQSK7PCqd/%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9-%D0%BA%D1%83%D1%80%D1%81-%2B?node-id=0%3A1&t=N5U3O7gCLWNAtsZS-0"
+  );
+});
+
+// Modal window
+let body = document.body;
 let main_btn = document.querySelector(".main-btn");
 let form_box = document.querySelector(".form-box");
 let form_btn = document.querySelector(".form-btn");
 let form2_box = document.querySelector(".form-2-box");
+let header_btn = document.querySelector(".header-btn");
 
-main_btn.onclick = () => {
-  form_box.classList.toggle("d-none");
-};
-form_btn.onclick = () => {
-  form_box.classList.toggle("d-none");
-  form2_box.classList.toggle("d-none");
-};
-form2_box.onclick = () => {
-  form2_box.classList.toggle("d-none");
-};
-
-let slider_btn = document.querySelectorAll(".slider-btn");
-
-for (let item of slider_btn) {
-  item.onclick = () => {
-    form_box.classList.toggle("d-none");
-  };
-}
+main_btn.addEventListener("click", function () {
+  form_box.classList.toggle("hide");
+  body.classList.add("lock");
+});
+header_btn.addEventListener("click", function () {
+  form_box.classList.toggle("hide");
+  body.classList.add("lock");
+});
+form_btn.addEventListener("click", function () {
+  form_box.classList.toggle("hide");
+  form2_box.classList.toggle("hide");
+  body.classList.add("lock");
+});
+form2_box.addEventListener("click", function () {
+  form2_box.classList.toggle("hide");
+  body.classList.toggle("lock");
+});
 
 document.addEventListener("keydown", function (event) {
   if (event.keyCode == 27) {
-    form_box.classList.add("d-none");
-    form2_box.classList.add("d-none");
+    form_box.classList.add("hide");
+    form2_box.classList.add("hide");
+    body.classList.remove("lock");
   }
-});
-
-document.addEventListener("keydown", function (event) {
   if (event.code == "KeyO" && event.altKey) {
-    form_box.classList.remove("d-none");
+    form_box.classList.remove("hide");
+    form2_box.classList.add("hide");
+    body.classList.add("lock");
   }
 });
 
-//Тут кнопка подробнее
-let other1 = document.querySelector(".others-1");
-let other2 = document.querySelector(".others-2");
-let other3 = document.querySelector(".others-3");
-let other4 = document.querySelector(".others-4");
-let other6 = document.querySelector(".others-6");
-let none1 = document.querySelector(".none1");
-let none2 = document.querySelector(".none2");
-let none3 = document.querySelector(".none3");
-let none4 = document.querySelector(".none4");
-let none6 = document.querySelector(".none6");
-console.log(other4, other6);
-
-other1.onclick = () => {
-  event.preventDefault();
-  none1.classList.remove("d-none");
-  other1.classList.add("d-none");
-};
-other2.onclick = () => {
-  event.preventDefault();
-  none2.classList.remove("d-none");
-  other2.classList.add("d-none");
-};
-other3.onclick = () => {
-  event.preventDefault();
-  none3.classList.remove("d-none");
-  other3.classList.add("d-none");
-};
-other4.onclick = (e) => {
-  e.preventDefault();
-  none4.classList.remove("d-none");
-  other4.classList.add("d-none");
-};
-other6.onclick = (e) => {
-  e.preventDefault();
-  none6.classList.remove("d-none");
-  other6.classList.add("d-none");
-};
-
-//Тут якорь
-let links_wrapper = document.querySelector(".links-wrapper").children;
-let h_link1 = links_wrapper[0];
-let h_link2 = links_wrapper[1];
-let h_link3 = links_wrapper[2];
-let h_link4 = links_wrapper[3];
-let h_link5 = links_wrapper[4];
-let sec1 = document.querySelector(".section2").offsetTop;
-let sec2 = document.querySelector(".section4").offsetTop;
-let sec3 = document.querySelector(".section5").offsetTop;
-let sec4 = sec3 + 450;
-let sec5 = document.querySelector(".section6").offsetTop;
-
-let jakor = () => {
-  event.preventDefault();
-  window.scrollTo({
-    top: sec1,
-    left: 0,
-    behavior: "smooth",
-  });
-};
-h_link1.addEventListener("click", jakor);
-
-let jakor2 = () => {
-  event.preventDefault();
-  window.scrollTo({
-    top: sec2,
-    left: 0,
-    behavior: "smooth",
-  });
-};
-h_link2.addEventListener("click", jakor2);
-
-let jakor3 = () => {
-  event.preventDefault();
-  window.scrollTo({
-    top: sec3,
-    left: 0,
-    behavior: "smooth",
-  });
-};
-h_link3.addEventListener("click", jakor3);
-
-let jakor4 = () => {
-  event.preventDefault();
-  window.scrollTo({
-    top: sec4,
-    left: 0,
-    behavior: "smooth",
-  });
-};
-h_link4.addEventListener("click", jakor4);
-
-let jakor5 = () => {
-  event.preventDefault();
-  window.scrollTo({
-    top: sec5,
-    left: 0,
-    behavior: "smooth",
-  });
-};
-h_link5.addEventListener("click", jakor5);
-
-let footer_links = document.querySelector(".footer-links-wrapper").children;
-let f_link1 = footer_links[0];
-let f_link2 = footer_links[1];
-let f_link3 = footer_links[2];
-let f_link4 = footer_links[3];
-let f_link5 = footer_links[4];
-
-f_link1.addEventListener("click", jakor);
-f_link2.addEventListener("click", jakor2);
-f_link3.addEventListener("click", jakor3);
-f_link4.addEventListener("click", jakor4);
-f_link5.addEventListener("click", jakor5);
-
-//Тут ночной режим
-let night_mode = document.querySelector(".night-mode");
-let night_round = document.querySelector(".night-button");
-let body = document.body;
-let header_links = document.querySelector(".links-wrapper");
-let section2 = document.querySelector(".section2");
-let section4 = document.querySelector(".section4");
-let slider = document.querySelector(".mySwiper");
-let next_btn = document.querySelector(".n-btn");
-let prev_btn = document.querySelector(".p-btn");
-let form1 = document.querySelector(".form-1");
-let form2 = document.querySelector(".form-2");
-let menu_open = document.querySelector(".menu-btn");
-let menu_close = document.querySelector(".close-menu");
-
-night_mode.addEventListener("click", function () {
-  section2.classList.toggle("orange-color");
-  night_mode.classList.toggle("night-right");
-  night_mode.classList.toggle("night-left");
-  night_round.classList.toggle("left-pos");
-  night_round.classList.toggle("right-pos");
-  body.classList.toggle("black-bg");
-  header_links.classList.toggle("white-color");
-  section4.classList.toggle("black-bg");
-  slider.classList.toggle("white-bg");
-  next_btn.classList.toggle("white-color");
-  prev_btn.classList.toggle("white-color");
-  form1.classList.toggle("grey-bg");
-  form2.classList.toggle("grey-bg");
-  menu_open.classList.toggle("inverter");
-  menu_close.classList.toggle("inverter");
+// Swiper js
+const mySwiper = new Swiper(".mySwiper", {
+  loop: true,
+  spaceBetween: 30,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+});
+const mySwiper2 = new Swiper(".mySwiper2", {
+  loop: true,
+  spaceBetween: 30,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
 });
 
-document.addEventListener("keydown", function (event) {
-  if (event.code == "KeyN" && event.shiftKey) {
-    section2.classList.toggle("orange-color");
-    night_mode.classList.toggle("night-right");
-    night_mode.classList.toggle("night-left");
-    night_round.classList.toggle("left-pos");
-    night_round.classList.toggle("right-pos");
-    body.classList.toggle("black-bg");
-    header_links.classList.toggle("white-color");
-    section4.classList.toggle("black-bg");
-    slider.classList.toggle("white-bg");
-    next_btn.classList.toggle("white-color");
-    prev_btn.classList.toggle("white-color");
-    form1.classList.toggle("grey-bg");
-    form2.classList.toggle("grey-bg");
-    menu_open.classList.toggle("inverter");
-    menu_close.classList.toggle("inverter");
-  }
-});
+// Адаптация для js
+let body_width = document.body.clientWidth;
+if (body_width <= 1600) {
+  start_height = 1500;
+}
+if (body_width <= 1300) {
+  start_height = 1600;
+}
 
-//Scroll indicator
+// scroll bar
+
 window.onscroll = function () {
   myFunction();
 };
@@ -237,231 +215,43 @@ function myFunction() {
   document.getElementById("myBar").style.width = scrolled + "%";
 }
 
-let scroller = document.querySelector(".header");
+// light or dark mode
 
-document.addEventListener("keydown", function (event) {
-  if (event.code == "KeyI" && event.ctrlKey) {
-    scroller.classList.toggle("d-none");
-  }
-});
+let mode = document.querySelector(".button_dark_or_sun_mode");
 
-//Pasxalka
-document.addEventListener("keydown", function (event) {
-  if (event.code == "KeyY") {
-    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-  }
-});
+let switchh = document.querySelector(".block_switch");
 
-//Certificate onclick image
-let cert1 = document.querySelector(".cert-1");
-let cert2 = document.querySelector(".cert-2");
-let cert3 = document.querySelector(".cert-3");
-let cert4 = document.querySelector(".cert-4");
-let for_cert1 = document.querySelector(".for-cert-1");
-let for_cert2 = document.querySelector(".for-cert-2");
-let for_cert3 = document.querySelector(".for-cert-3");
-let for_cert4 = document.querySelector(".for-cert-4");
-
-cert1.addEventListener("click", function () {
-  for_cert1.classList.toggle("d-none");
-  cert1.style.opacity = 0;
-});
-for_cert1.addEventListener("click", function () {
-  for_cert1.classList.toggle("d-none");
-  cert1.style.opacity = 1;
-});
-
-cert2.addEventListener("click", function () {
-  for_cert2.classList.toggle("d-none");
-  cert2.style.opacity = 0;
-});
-for_cert2.addEventListener("click", function () {
-  for_cert2.classList.toggle("d-none");
-  cert2.style.opacity = 1;
-});
-
-cert3.addEventListener("click", function () {
-  for_cert3.classList.toggle("d-none");
-  cert3.style.opacity = 0;
-});
-for_cert3.addEventListener("click", function () {
-  for_cert3.classList.toggle("d-none");
-  cert3.style.opacity = 1;
-});
-
-cert4.addEventListener("click", function () {
-  for_cert4.classList.toggle("d-none");
-  cert4.style.opacity = 0;
-});
-for_cert4.addEventListener("click", function () {
-  for_cert4.classList.toggle("d-none");
-  cert4.style.opacity = 1;
-});
-
-document.addEventListener("keydown", function (event) {
-  if (event.keyCode == 27) {
-    for_cert1.classList.add("d-none");
-    cert1.style.opacity = 1;
-    for_cert2.classList.add("d-none");
-    cert2.style.opacity = 1;
-    for_cert3.classList.add("d-none");
-    cert3.style.opacity = 1;
-    for_cert4.classList.add("d-none");
-    cert4.style.opacity = 1;
-  }
-});
-
-//Адаптация для js
-let body_width = document.body.clientWidth;
-
-if (body_width <= 1360) {
-  sec4 = sec3 + 650;
-}
-
-if (body_width <= 1260) {
-  mySwiper = new Swiper(".mySwiper", {
-    loop: true,
-    slidesPerView: 2,
-    spaceBetween: 20,
-    navigation: {
-      prevEl: ".swiper-button-prev",
-      nextEl: ".swiper-button-next",
-    },
-  });
-  mySwiper2 = new Swiper(".mySwiper2", {
-    loop: true,
-    slidesPerView: 2,
-    spaceBetween: 20,
-    navigation: {
-      prevEl: ".swiper-button-prev",
-      nextEl: ".swiper-button-next",
-    },
-  });
-}
-if (body_width <= 760) {
-  mySwiper = new Swiper(".mySwiper", {
-    loop: true,
-    slidesPerView: 1,
-    spaceBetween: 20,
-    navigation: {
-      prevEl: ".swiper-button-prev",
-      nextEl: ".swiper-button-next",
-    },
-  });
-  mySwiper2 = new Swiper(".mySwiper2", {
-    loop: true,
-    slidesPerView: 1,
-    spaceBetween: 20,
-    navigation: {
-      prevEl: ".swiper-button-prev",
-      nextEl: ".swiper-button-next",
-    },
-  });
-  sec4 = sec3 + 1000;
-}
-if (body_width < 540) {
-  let body_children = document.body.children;
-  let sorry_box = document.querySelector(".sorry-box");
-  for (let item of body_children) {
-    item.classList.add("d-none");
-  }
-  sorry_box.classList.remove("d-none");
-}
-
-//Burger Menu
-let menu_main = document.querySelector(".menu");
-menu_open.addEventListener("click", function () {
-  menu_main.classList.toggle("d-none");
-  menu_open.classList.toggle("d-none");
-});
-menu_close.addEventListener("click", function () {
-  menu_main.classList.toggle("d-none");
-  menu_open.classList.toggle("d-none");
-});
-
-document.addEventListener("keydown", function () {
-  if (event.keyCode == 27) {
-    menu_main.classList.add("d-none");
-    menu_open.classList.remove("d-none");
-  }
-});
-
-let b_link1 = document.querySelector(".ml-1");
-let b_link2 = document.querySelector(".ml-2");
-let b_link3 = document.querySelector(".ml-3");
-let b_link4 = document.querySelector(".ml-4");
-let b_link5 = document.querySelector(".ml-5");
-
-b_link1.addEventListener("click", jakor);
-b_link2.addEventListener("click", jakor2);
-b_link3.addEventListener("click", jakor3);
-b_link4.addEventListener("click", jakor4);
-b_link5.addEventListener("click", jakor5);
-
-//Drag And Drop for photos (1)
-console.warn(
-  "Drag and Drop: меняю аттрибуты 'src' первой и последней картинки, вот эти аттрибуты"
-);
-let drag_and_drop = () => {
-  let items = document.querySelectorAll(".certificate-wrapper .cert");
-  let delay_time = 300;
-  let first_src;
-  let last_src;
-  for (let item of items) {
-    item.classList.remove("over");
-  }
-
-  let dr_st = function () {
-    this.style.opacity = 0.4;
-    for (let item of items) {
-      if (item == this) {
-        first_src = item.getAttribute("src");
-        console.log(first_src);
-      }
-    }
-  };
-  let dr_end = function () {
-    this.style.opacity = 1;
-  };
-  let dr_ov = function (event) {
-    event.preventDefault();
-  };
-  let dr_entr = function () {
-    this.classList.add("over");
-  };
-  let dr_lv = function () {
-    this.classList.remove("over");
-  };
-  let dr_op = function () {
-    this.classList.remove("over");
-    for (let item of items) {
-      if (item == this) {
-        last_src = item.getAttribute("src");
-        console.log(item.getAttribute("src"));
-        setTimeout(() => {
-          item.setAttribute("src", first_src);
-        }, delay_time);
-      }
-    }
-  };
-  let dr_end2 = function () {
-    for (let item of items) {
-      if (item == this) {
-        setTimeout(() => {
-          item.setAttribute("src", last_src);
-        }, delay_time);
-      }
-    }
-  };
-
-  for (let item of items) {
-    item.addEventListener("dragover", dr_ov);
-    item.addEventListener("dragenter", dr_entr);
-    item.addEventListener("dragleave", dr_lv);
-    item.addEventListener("drop", dr_op);
-    item.addEventListener("dragstart", dr_st);
-    item.addEventListener("dragend", dr_end);
-    item.addEventListener("dragend", dr_end2);
+mode.onclick = () => {
+  mode.classList.toggle("color_mode");
+  switchh.classList.toggle("right");
+  let theme = document.getElementById("theme");
+  if (theme.getAttribute("href") == "./CSS/") {
+    theme.href = "./CSS/dark.css";
+  } else {
+    theme.href = "./CSS/";
   }
 };
-drag_and_drop();
+
+document.addEventListener("keydown", function (event) {
+  if (event.code == "KeyN" && event.shiftKey) {
+    mode.classList.toggle("color_mode");
+    switchh.classList.toggle("right");
+    let theme = document.getElementById("theme");
+    if (theme.getAttribute("href") == "./CSS/") {
+      theme.href = "./CSS/dark.css";
+    } else {
+      theme.href = "./CSS/";
+    }
+  }
+});
+
+// Burger menu
+
+let burger = document.querySelector(".display-none-burger");
+let span = document.querySelector(".burger span");
+let menu = document.querySelector(".menu");
+burger.onclick = () => {
+  body.classList.toggle("lock");
+  span.classList.toggle("crestik");
+  menu.classList.toggle("animate");
+};
