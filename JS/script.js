@@ -10,7 +10,7 @@ function dateCounter() {
   let seconds = document.querySelector(".seconds");
 
   // Делаю расчеты
-  let nextDate = new Date(`Jan 07 ${new Date().getFullYear()} 18:00:00`);
+  let nextDate = new Date(`Jun 01 ${new Date().getFullYear()} 00:00:00`);
 
   let today = new Date();
   let diff = nextDate - today;
